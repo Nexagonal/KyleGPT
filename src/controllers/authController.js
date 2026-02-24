@@ -19,9 +19,10 @@ const requestCode = (req, res) => {
         if (err) return res.status(500).json({ error: err.message })
 
         if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+            const fromEmail = process.env.SMTP_FROM_EMAIL || 'noreply@example.com';
             try {
                 await transporter.sendMail({
-                    from: '"KyleGPT" <kylegpt@namgostar.com>',
+                    from: `"KyleGPT" <${fromEmail}>`,
                     to: email,
                     subject: 'Your KyleGPT Verification Code',
                     html: `

@@ -49,6 +49,7 @@ The iOS client is built entirely in SwiftUI and structured for scalability:
    - `ADMIN_EMAIL`: The email address of the human playing the AI.
    - `FIREBASE_SERVICE_ACCOUNT`: Path to `serviceAccountKey.json`.
    - `APN_KEY_ID`, `APN_TEAM_ID`, `BUNDLE_ID`: For Apple Push Notifications.
+   - `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM_EMAIL`: For email verification codes.
 
 3. **Start the Server**
    For development:
