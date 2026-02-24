@@ -4,7 +4,7 @@ npm-debug.log*
 
 # Environments
 .env*
-.env
+!.env.example
 
 # Databases
 *.db
