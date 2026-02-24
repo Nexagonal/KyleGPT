@@ -1,0 +1,27 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Environments
+.env*
+.env
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Keys / Credentials
+*.p8
+*.pem
+*.key
+serviceAccountKey.json
+GoogleService-Info.plist
+Secrets.swift
+
+# macOS / iOS Storage
+.DS_Store
+xcuserdata/
+DerivedData/
+*.xcworkspace/xcuserdata
+*.xcodeproj/xcuserdata
