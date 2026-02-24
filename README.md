@@ -40,11 +40,15 @@ The iOS client is built entirely in SwiftUI and structured for scalability:
    ```
 
 2. **Environment Configuration**
-   Copy the example environment file and populate your credentials.
+   Copy the example environment file and populate your credentials:
    ```bash
    cp .env.example .env
    ```
-   *Required variables include your `PORT`, Firebase `serviceAccountKey.json` path, APN keys, SMTP details, and an `ADMIN_EMAIL`.*
+   *Required Variables:*
+   - `PORT`: (e.g., 3000)
+   - `ADMIN_EMAIL`: The email address of the human playing the AI.
+   - `FIREBASE_SERVICE_ACCOUNT`: Path to `serviceAccountKey.json`.
+   - `APN_KEY_ID`, `APN_TEAM_ID`, `BUNDLE_ID`: For Apple Push Notifications.
 
 3. **Start the Server**
    For development:
@@ -58,10 +62,18 @@ The iOS client is built entirely in SwiftUI and structured for scalability:
 
 ### iOS Setup
 
-1. Open `KyleGPT.xcodeproj` in Xcode.
-2. Update the `AppConfig` struct in `KyleGPTApp.swift` to point to your deployed backend URL.
-3. Ensure the project is signed with an Apple Developer account capable of Push Notifications.
-4. Build and run on a physical device or simulator.
+1. **Open the Project:** Open `KyleGPT.xcodeproj` in Xcode.
+2. **Configure Secrets:** 
+   - Duplicate `KyleGPT/Secrets.swift.example` and rename it to `Secrets.swift` locally.
+   - If `Secrets.swift` does not appear in Xcode, drag it from Finder into the `KyleGPT` group in the Xcode Project Navigator.
+   - Fill in your `serverURL`, `apiKey`, and `adminEmail` inside `Secrets.swift`.
+3. **Firebase Configuration:**
+   - Download your `GoogleService-Info.plist` from your Firebase Console.
+   - Drag and drop it into the `KyleGPT` group in Xcode.
+4. **Provisioning:** Ensure the project is signed with an Apple Developer account capable of Push Notifications.
+5. **Compile & Run:** Build and run on a physical device or simulator.
+
+*Note: `Secrets.swift`, `GoogleService-Info.plist`, `.env` and `chat.db` are explicitly git-ignored to guarantee your repository remains perfectly clean.*
 
 ## Key Features
 
