@@ -17,6 +17,9 @@ struct ChatContainerView: View {
     
     @State private var showRenameUserAlert = false
     @State private var renameUserText = ""
+    
+    @State private var showDeleteAccountConfirm = false
+    @State private var isDeletingAccount = false
 
     private let pollTimer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
 
@@ -138,6 +141,14 @@ struct ChatContainerView: View {
                 }
             }
             Button("Cancel", role: .cancel) {}
+        }
+        .alert("Delete Account", isPresented: $showDeleteAccountConfirm) {
+            Button("Delete and Erase All Data", role: .destructive) {
+                deleteAccount()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Are you sure you want to permanently delete your account and all associated data? This action cannot be undone.")
         }
         .onReceive(pollTimer) { _ in fetchChats() }
     }
@@ -310,6 +321,19 @@ struct ChatContainerView: View {
                             .background(Color.primary.opacity(0.05))
                             .clipShape(Circle())
                     }
+                    
+                    if !isGuestMode {
+                        Button(action: {
+                            showDeleteAccountConfirm = true
+                        }) {
+                            Image(systemName: "trash")
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundColor(.red)
+                                .padding(6)
+                                .background(Color.red.opacity(0.1))
+                                .clipShape(Circle())
+                        }
+                    }
 
                     Button(action: {
                         withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) { showChatHistory = false }
@@ -390,6 +414,17 @@ struct ChatContainerView: View {
                 if let http = res as? HTTPURLResponse, http.statusCode == 200 {
                     self.userNickname = trimmed
                 }
+            }
+        }
+    }
+
+    func deleteAccount() {
+        guard let url = URL(string: "\(AppConfig.serverURL)/account") else { return }
+        var r = APIClient.shared.authenticatedRequest(url: url, method: "DELETE")
+        APIClient.shared.dataTask(with: r) { _, _, _ in
+            DispatchQueue.main.async {
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) { showChatHistory = false }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { logoutAction() }
             }
         }
     }
