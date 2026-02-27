@@ -63,10 +63,16 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 @main
 struct KyleGPTApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @Environment(\.scenePhase) private var scenePhase
     
     var body: some Scene {
         WindowGroup {
             MainContentView()
+        }
+        .onChange(of: scenePhase) { newPhase in
+            if newPhase == .active {
+                UIApplication.shared.applicationIconBadgeNumber = 0
+            }
         }
     }
 }

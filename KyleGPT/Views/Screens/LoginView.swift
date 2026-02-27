@@ -54,13 +54,7 @@ struct LoginView: View {
                             }
                         }
                         
-                        TextField("", text: $code)
-                            .keyboardType(.numberPad)
-                            .textContentType(.oneTimeCode)
-                            .foregroundColor(.clear)
-                            .accentColor(.clear)
-                            .tint(.clear)
-                            .background(Color.white.opacity(0.001))
+                        OTPTextField(text: $code)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .focused($focusedField, equals: .code)
                             .onChange(of: code) { newValue in
@@ -343,5 +337,45 @@ struct LoginView: View {
                 )
             }
         }.resume()
+    }
+}
+
+struct OTPTextField: UIViewRepresentable {
+    @Binding var text: String
+
+    func makeUIView(context: Context) -> UITextField {
+        let textField = UITextField()
+        textField.keyboardType = .numberPad
+        textField.textContentType = .oneTimeCode
+        textField.textColor = .clear
+        textField.tintColor = .clear
+        textField.backgroundColor = .clear
+        textField.delegate = context.coordinator
+        
+        // Disable long press menu (copy/paste) since it's invisible
+        textField.isUserInteractionEnabled = true
+        return textField
+    }
+
+    func updateUIView(_ uiView: UITextField, context: Context) {
+        uiView.text = text
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, UITextFieldDelegate {
+        var parent: OTPTextField
+
+        init(_ parent: OTPTextField) {
+            self.parent = parent
+        }
+
+        func textFieldDidChangeSelection(_ textField: UITextField) {
+            DispatchQueue.main.async {
+                self.parent.text = textField.text ?? ""
+            }
+        }
     }
 }

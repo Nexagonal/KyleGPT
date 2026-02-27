@@ -310,38 +310,35 @@ struct ChatContainerView: View {
                     
                     Spacer()
                     
-                    Button(action: {
-                        renameUserText = userNickname
-                        showRenameUserAlert = true
-                    }) {
-                        Image(systemName: "pencil")
-                            .font(.system(size: 12, weight: .semibold))
+                    Menu {
+                        Button(action: {
+                            renameUserText = userNickname
+                            showRenameUserAlert = true
+                        }) {
+                            Label("Change Nickname", systemImage: "pencil")
+                        }
+                        
+                        if !isGuestMode {
+                            Button(role: .destructive, action: {
+                                showDeleteAccountConfirm = true
+                            }) {
+                                Label("Delete Account", systemImage: "trash")
+                            }
+                        }
+                        
+                        Button(role: .destructive, action: {
+                            withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) { showChatHistory = false }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { logoutAction() }
+                        }) {
+                            Label("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis")
+                            .font(.system(size: 16, weight: .medium))
                             .foregroundColor(.secondary)
-                            .padding(6)
+                            .padding(8)
                             .background(Color.primary.opacity(0.05))
                             .clipShape(Circle())
-                    }
-                    
-                    if !isGuestMode {
-                        Button(action: {
-                            showDeleteAccountConfirm = true
-                        }) {
-                            Image(systemName: "trash")
-                                .font(.system(size: 12, weight: .semibold))
-                                .foregroundColor(.red)
-                                .padding(6)
-                                .background(Color.red.opacity(0.1))
-                                .clipShape(Circle())
-                        }
-                    }
-
-                    Button(action: {
-                        withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) { showChatHistory = false }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { logoutAction() }
-                    }) {
-                        Text("Sign Out")
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundColor(.red)
                     }
                 }
                 .padding(.horizontal).padding(.vertical, 10)
