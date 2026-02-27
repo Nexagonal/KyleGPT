@@ -336,9 +336,10 @@ struct ChatContainerView: View {
                         Image(systemName: "ellipsis")
                             .font(.system(size: 16, weight: .medium))
                             .foregroundColor(.secondary)
-                            .padding(8)
-                            .background(Color.primary.opacity(0.05))
+                            .frame(width: 32, height: 32)
+                            .background(.ultraThinMaterial)
                             .clipShape(Circle())
+                            .overlay(Circle().stroke(Color.primary.opacity(0.1), lineWidth: 0.5))
                     }
                 }
                 .padding(.horizontal).padding(.vertical, 10)
